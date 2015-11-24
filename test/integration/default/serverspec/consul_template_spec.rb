@@ -14,7 +14,7 @@ describe 'Consul Template' do
     it { should be_executable }
   end
 
-  describe file('/opt/consul-template/config/consul-template.cfg') do
+  describe file('/opt/consul-template/config.d/consul-template.cfg') do
     it { should be_file }
   end
 end

@@ -18,7 +18,7 @@
   with_items:
     - "{{ consul_template_home }}"
     - "{{ consul_template_home }}/bin"
-    - "{{ consul_template_home }}/config"
+    - "{{ consul_template_home }}/config.d"
     - "{{ consul_template_home }}/templates"
 
 - name: download consul-template binary
@@ -58,5 +58,5 @@
 - name: consul-template config file
   template: >
     src={{ consul_template_config_file_template }}
-    dest={{ consul_template_home }}/config/{{ consul_template_config_file }}
+    dest={{ consul_template_home }}/config.d/{{ consul_template_config_file }}
     mode=0755

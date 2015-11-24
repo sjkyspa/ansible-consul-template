@@ -25,7 +25,6 @@
   get_url:
     url: "{{ consul_template_download_url }}"
     dest: "/tmp"
-  delegate_to: localhost
 
 - name: unzip the downloaded package
   unarchive:

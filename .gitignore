@@ -1,2 +1,3 @@
 .kitchen/
 bin/
+meta/.galaxy_install_info

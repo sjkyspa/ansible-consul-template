@@ -33,19 +33,31 @@
     dest: "{{ consul_template_home }}/bin"
     copy: no
 
-- name: copy consul-template systemd service configuration
-  template: >
-    src=consul-template.service.systemd.j2
-    dest=/etc/systemd/system/consul-template.service
-    mode=0755
-  when: consul_template_use_systemd
+- name: upstart check
+  stat: path=/etc/init/
+  register: etc_init
+
+- name: systemd check
+  stat: path=/usr/lib/systemd/system/
+  register: systemd_check
 
 - name: copy consul-template upstart service configuration
   template: >
-    src=consul-template.service.upstart.j2
-    dest=/etc/init/consul-template.conf
-    mode=0755
-  when: consul_template_use_upstart
+      src=consul-template.service.upstart.j2
+      dest=/etc/init/consul-template.conf
+      mode=0755
+  when: etc_init.stat.exists == true and systemd_check.stat.exists == false
+  notify:
+    - restart consul-template
+
+- name: copy consul-template systemd service configuration
+  template: >
+      src=consul-template.service.systemd.j2
+      dest=/etc/systemd/system/consul-template.service
+      mode=0755
+  when: systemd_check.stat.exists == true and etc_init.stat.exists == false
+  notify:
+    - restart consul-template
 
 - name: add consul-template to path through profile.d
   template: >
